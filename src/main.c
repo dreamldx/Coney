@@ -109,6 +109,13 @@ static void build_ui(void)
     lv_obj_align(bar, LV_ALIGN_CENTER, 0, 20);
     lv_bar_set_range(bar, 0, 100);
 
+    /* CJK test: checks that the 14 px CJK font renders Chinese */
+    lv_obj_t *hello = lv_label_create(scr);
+    lv_label_set_text(hello, "你好");
+    lv_obj_set_style_text_font(hello, &lv_font_source_han_sans_sc_14_cjk, 0);
+    lv_obj_set_style_text_color(hello, lv_color_white(), 0);
+    lv_obj_align_to(hello, bar, LV_ALIGN_OUT_BOTTOM_MID, 0, 12);
+
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, bar);
