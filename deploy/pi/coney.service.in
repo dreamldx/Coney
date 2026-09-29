@@ -1,0 +1,26 @@
+# Rendered by `make deploy` into /etc/systemd/system/coney.service
+# Placeholders: @BUILD_BIN@ (the freshly built binary), @PROD_DIR@ (where it is run from)
+
+[Unit]
+Description=Coney display UI (Whisplay HAT)
+After=local-fs.target systemd-modules-load.service
+# Needs SPI enabled: dtparam=spi=on in /boot/firmware/config.txt
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=@PROD_DIR@
+
+# Load spidev if it is not loaded yet. A leading "-" means: do not fail the unit.
+ExecStartPre=-/usr/sbin/modprobe spidev
+# On every start, copy the latest build into prod and run that copy. If there is no build
+# (e.g. the build directory was cleaned) the copy already in prod is used.
+ExecStartPre=-/usr/bin/install -D -m 0755 @BUILD_BIN@ @PROD_DIR@/coney
+ExecStart=@PROD_DIR@/coney
+
+# spidev may show up a moment after boot; retry instead of giving up
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
