@@ -14,6 +14,7 @@ add_subdirectory(third_party/lvgl EXCLUDE_FROM_ALL)
 
 add_executable(coney
   src/main.c
+  src/sysinfo.c
   src/whisplay_display.c
 )
 target_include_directories(coney PRIVATE src)
